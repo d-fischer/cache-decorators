@@ -30,10 +30,10 @@
     eslint-plugin-import "^2.18.2"
     eslint-plugin-jsdoc "^17.0.1"
 
-"@d-fischer/shared-utils@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@d-fischer/shared-utils/-/shared-utils-1.0.0.tgz#70a93bc5886298fa2bb3dfb213b52bb963ebdd39"
-  integrity sha512-hxcKgf56JrZzchHxV3HdH3wPNTrXAP4yHmWX5xd0L17wta/VUDiSZryTEFFkH8HlI8uyis6QOZfvj7lVM6Kr6Q==
+"@d-fischer/shared-utils@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@d-fischer/shared-utils/-/shared-utils-1.0.1.tgz#24c9102a9ec8bf8d1a52242c3a5ec14ff9e1d8fa"
+  integrity sha512-7KzGUylJvB9lt4zeFZVu/2UtLegYEkA9FQ40+Rql6dzyvB2zYNgIz5HjlEGlGaPndUnV6xa8lEmlXslywnp2Gw==
   dependencies:
     "@types/node" "^12.12.14"
     tslib "^1.10.0"

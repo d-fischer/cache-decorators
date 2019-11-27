@@ -13,7 +13,7 @@
   "author": "Daniel Fischer <daniel@d-fischer.dev>",
   "license": "MIT",
   "dependencies": {
-    "@d-fischer/shared-utils": "^1.0.0",
+    "@d-fischer/shared-utils": "^1.0.1",
     "@types/node": "^12.12.14",
     "tslib": "^1.10.0"
   },
