@@ -30,6 +30,14 @@
     eslint-plugin-import "^2.18.2"
     eslint-plugin-jsdoc "^17.0.1"
 
+"@d-fischer/shared-utils@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@d-fischer/shared-utils/-/shared-utils-1.0.0.tgz#70a93bc5886298fa2bb3dfb213b52bb963ebdd39"
+  integrity sha512-hxcKgf56JrZzchHxV3HdH3wPNTrXAP4yHmWX5xd0L17wta/VUDiSZryTEFFkH8HlI8uyis6QOZfvj7lVM6Kr6Q==
+  dependencies:
+    "@types/node" "^12.12.14"
+    tslib "^1.10.0"
+
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.3.tgz#3a582bdb53804c6ba6d146579c46e52130cf4a3b"
