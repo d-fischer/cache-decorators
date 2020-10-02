@@ -20,17 +20,18 @@
   "author": "Daniel Fischer <daniel@d-fischer.dev>",
   "license": "MIT",
   "dependencies": {
-    "@d-fischer/shared-utils": "^2.0.0",
-    "@types/node": "^12.12.14",
-    "tslib": "^1.10.0"
+    "@d-fischer/shared-utils": "^2.4.0",
+    "@types/node": "^14.11.2",
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
-    "@d-fischer/eslint-config": "^1.0.3",
-    "eslint": "^6.7.1",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
-    "prettier": "^1.19.1",
-    "ts-hybrid-esm-build": "^0.2.1"
+    "@d-fischer/eslint-config": "^2.0.6",
+    "eslint": "^7.10.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2",
+    "tsukuru": "^0.5.0",
+    "typescript": "~4.0.3"
   },
   "files": [
     "LICENSE",
@@ -42,8 +43,8 @@
     "lint": "eslint --ext ts src",
     "prettier:check": "prettier --check 'src/**'",
     "prettier:fix": "prettier --write 'src/**'",
-    "build": "ts-hybrid-esm-build",
-    "rebuild": "ts-hybrid-esm-build --clean"
+    "build": "tsukuru",
+    "rebuild": "tsukuru --clean"
   },
   "husky": {
     "hooks": {
