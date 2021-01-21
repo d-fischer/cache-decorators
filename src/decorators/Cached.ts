@@ -1,10 +1,11 @@
-import createCacheKey from '../utils/createCacheKey';
+import type { CacheableType } from './Cacheable';
+import { createCacheKey } from '../utils/createCacheKey';
 
-export default function Cached(timeInSeconds: number = Infinity, cacheFailures: boolean = false) {
-	return function (target: any, propName: string, descriptor: PropertyDescriptor) {
+export function Cached(timeInSeconds: number = Infinity, cacheFailures: boolean = false) {
+	return function (target: any, propName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
 		const origFn = descriptor.value;
 
-		descriptor.value = async function (this: any, ...params: any[]) {
+		descriptor.value = async function (this: CacheableType<unknown>, ...params: any[]) {
 			const cacheKey = createCacheKey(propName, params);
 			const cachedValue = this.getFromCache(cacheKey);
 

@@ -1,12 +1,18 @@
-import { Constructor } from '@d-fischer/shared-utils';
-import createCacheKey from '../utils/createCacheKey';
-import CacheEntry from '../types/CacheEntry';
+import type { Constructor } from '@d-fischer/shared-utils';
+import { createCacheKey } from '../utils/createCacheKey';
+import type { CacheEntry } from '../types/CacheEntry';
 
-export default function Cacheable<T extends Constructor>(cls: T) {
-	return class extends cls {
-		cache: Map<string, CacheEntry> = new Map();
+export type CacheableType<T> = T & {
+	getFromCache: (key: string) => unknown;
+	setCache: (key: string, value: unknown, timeInSeconds: number) => void;
+	removeFromCache: (key: string | string[], prefix?: boolean) => void;
+};
 
-		getFromCache(cacheKey: string): {} | undefined {
+export function Cacheable<T>(cls: Constructor<T>): Constructor<CacheableType<T>> {
+	return (class extends (cls as Constructor<any>) {
+		cache = new Map<string, CacheEntry>();
+
+		getFromCache(cacheKey: string): unknown | undefined {
 			this._cleanCache();
 			if (this.cache.has(cacheKey)) {
 				const entry = this.cache.get(cacheKey);
@@ -19,7 +25,7 @@ export default function Cacheable<T extends Constructor>(cls: T) {
 			return undefined;
 		}
 
-		setCache(cacheKey: string, value: {}, timeInSeconds: number) {
+		setCache(cacheKey: string, value: unknown, timeInSeconds: number) {
 			this.cache.set(cacheKey, {
 				value,
 				expires: Date.now() + timeInSeconds * 1000
@@ -27,16 +33,7 @@ export default function Cacheable<T extends Constructor>(cls: T) {
 		}
 
 		removeFromCache(cacheKey: string | string[], prefix?: boolean) {
-			let internalCacheKey: string;
-			if (typeof cacheKey === 'string') {
-				internalCacheKey = cacheKey;
-				if (!internalCacheKey.endsWith('/')) {
-					internalCacheKey += '/';
-				}
-			} else {
-				const propName = cacheKey.shift()!;
-				internalCacheKey = createCacheKey(propName, cacheKey, prefix);
-			}
+			const internalCacheKey = this._getInternalCacheKey(cacheKey, prefix);
 			if (prefix) {
 				this.cache.forEach((val, key) => {
 					if (key.startsWith(internalCacheKey)) {
@@ -48,7 +45,7 @@ export default function Cacheable<T extends Constructor>(cls: T) {
 			}
 		}
 
-		_cleanCache() {
+		private _cleanCache() {
 			const now = Date.now();
 			this.cache.forEach((val, key) => {
 				if (val.expires < now) {
@@ -56,5 +53,18 @@ export default function Cacheable<T extends Constructor>(cls: T) {
 				}
 			});
 		}
-	};
+
+		private _getInternalCacheKey(cacheKey: string | string[], prefix: boolean | undefined): string {
+			if (typeof cacheKey === 'string') {
+				let internalCacheKey = cacheKey;
+				if (!internalCacheKey.endsWith('/')) {
+					internalCacheKey += '/';
+				}
+				return internalCacheKey;
+			} else {
+				const propName = cacheKey.shift()!;
+				return createCacheKey(propName, cacheKey, prefix);
+			}
+		}
+	} as unknown) as Constructor<CacheableType<T>>;
 }

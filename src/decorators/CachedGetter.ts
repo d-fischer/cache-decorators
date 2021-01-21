@@ -1,11 +1,13 @@
-import createCacheKey from '../utils/createCacheKey';
+import { createCacheKey } from '../utils/createCacheKey';
+import type { CacheableType } from './Cacheable';
 
-export default function CachedGetter(timeInSeconds: number = Infinity) {
-	return function (target: any, propName: string, descriptor: PropertyDescriptor) {
+export function CachedGetter(timeInSeconds: number = Infinity) {
+	return function (target: any, propName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
 		if (descriptor.get) {
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			const origFn = descriptor.get;
 
-			descriptor.get = function (this: any, ...params: any[]) {
+			descriptor.get = function (this: CacheableType<unknown>, ...params: any[]) {
 				const cacheKey = createCacheKey(propName, params);
 				const cachedValue = this.getFromCache(cacheKey);
 

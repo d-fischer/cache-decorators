@@ -23,6 +23,6 @@ function createSingleCacheKey(param: any) {
 	}
 }
 
-export default function createCacheKey(propName: string, params: any[], prefix?: boolean) {
+export function createCacheKey(propName: string, params: any[], prefix?: boolean): string {
 	return [propName, ...params.map(createSingleCacheKey)].join('/') + (prefix ? '/' : '');
 }

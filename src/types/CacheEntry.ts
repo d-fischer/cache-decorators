@@ -1,4 +1,4 @@
-export default interface CacheEntry<T = any> {
+export interface CacheEntry<T = unknown> {
 	value: T;
 	expires: number;
 }
