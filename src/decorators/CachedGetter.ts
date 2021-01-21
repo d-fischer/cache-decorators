@@ -7,15 +7,15 @@ export function CachedGetter(timeInSeconds: number = Infinity) {
 			// eslint-disable-next-line @typescript-eslint/unbound-method
 			const origFn = descriptor.get;
 
-			descriptor.get = function (this: CacheableType<unknown>, ...params: any[]) {
-				const cacheKey = createCacheKey(propName, params);
+			descriptor.get = function (this: CacheableType<unknown>) {
+				const cacheKey = createCacheKey(propName, []);
 				const cachedValue = this.getFromCache(cacheKey);
 
 				if (cachedValue) {
 					return cachedValue;
 				}
 
-				const result = origFn.apply(this, params);
+				const result = origFn.call(this);
 				this.setCache(cacheKey, result, timeInSeconds);
 				return result;
 			};
