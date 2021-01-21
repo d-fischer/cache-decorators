@@ -1,4 +1,4 @@
-import type { Constructor } from '@d-fischer/shared-utils';
+import type { ConstructedType, Constructor } from '@d-fischer/shared-utils';
 import { createCacheKey } from '../utils/createCacheKey';
 import type { CacheEntry } from '../types/CacheEntry';
 
@@ -8,7 +8,7 @@ export type CacheableType<T> = T & {
 	removeFromCache: (key: string | string[], prefix?: boolean) => void;
 };
 
-export function Cacheable<T>(cls: Constructor<T>): Constructor<CacheableType<T>> {
+export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<CacheableType<ConstructedType<T>>> & T {
 	return (class extends (cls as Constructor<any>) {
 		cache = new Map<string, CacheEntry>();
 
@@ -66,5 +66,5 @@ export function Cacheable<T>(cls: Constructor<T>): Constructor<CacheableType<T>>
 				return createCacheKey(propName, cacheKey, prefix);
 			}
 		}
-	} as unknown) as Constructor<CacheableType<T>>;
+	} as unknown) as Constructor<CacheableType<ConstructedType<T>>> & T;
 }
