@@ -9,7 +9,7 @@ export type CacheableType<T> = T & {
 };
 
 export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<CacheableType<ConstructedType<T>>> & T {
-	return (class extends (cls as Constructor<any>) {
+	return class extends (cls as Constructor<any>) {
 		cache = new Map<string, CacheEntry>();
 
 		getFromCache(cacheKey: string): unknown | undefined {
@@ -66,5 +66,5 @@ export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<Cache
 				return createCacheKey(propName, cacheKey, prefix);
 			}
 		}
-	} as unknown) as Constructor<CacheableType<ConstructedType<T>>> & T;
+	} as unknown as Constructor<CacheableType<ConstructedType<T>>> & T;
 }
