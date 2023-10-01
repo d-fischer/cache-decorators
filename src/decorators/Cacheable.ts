@@ -8,14 +8,16 @@ export type CacheableType<T> = T & {
 	removeFromCache: (key: string | string[], prefix?: boolean) => void;
 };
 
+const cacheSymbol = Symbol('cache');
+
 export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<CacheableType<ConstructedType<T>>> & T {
 	return class extends (cls as Constructor<any>) {
-		cache = new Map<string, CacheEntry>();
+		private readonly [cacheSymbol] = new Map<string, CacheEntry>();
 
 		getFromCache(cacheKey: string): unknown | undefined {
 			this._cleanCache();
-			if (this.cache.has(cacheKey)) {
-				const entry = this.cache.get(cacheKey);
+			if (this[cacheSymbol].has(cacheKey)) {
+				const entry = this[cacheSymbol].get(cacheKey);
 
 				if (entry) {
 					return entry.value;
@@ -26,7 +28,7 @@ export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<Cache
 		}
 
 		setCache(cacheKey: string, value: unknown, timeInSeconds: number) {
-			this.cache.set(cacheKey, {
+			this[cacheSymbol].set(cacheKey, {
 				value,
 				expires: Date.now() + timeInSeconds * 1000
 			});
@@ -35,21 +37,21 @@ export function Cacheable<T extends Constructor<any>>(cls: T): Constructor<Cache
 		removeFromCache(cacheKey: string | string[], prefix?: boolean) {
 			const internalCacheKey = this._getInternalCacheKey(cacheKey, prefix);
 			if (prefix) {
-				this.cache.forEach((val, key) => {
+				this[cacheSymbol].forEach((val, key) => {
 					if (key.startsWith(internalCacheKey)) {
-						this.cache.delete(key);
+						this[cacheSymbol].delete(key);
 					}
 				});
 			} else {
-				this.cache.delete(internalCacheKey);
+				this[cacheSymbol].delete(internalCacheKey);
 			}
 		}
 
 		private _cleanCache() {
 			const now = Date.now();
-			this.cache.forEach((val, key) => {
+			this[cacheSymbol].forEach((val, key) => {
 				if (val.expires < now) {
-					this.cache.delete(key);
+					this[cacheSymbol].delete(key);
 				}
 			});
 		}
